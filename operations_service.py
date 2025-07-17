@@ -1,7 +1,7 @@
 # operations_service.py
 
 import logging
-from mathematical_operations_functions_service import fib, factorial
+from mathematical_operations_functions import fib, factorial
 from exceptions import MissingOperandError, NegativeNumberError, ZeroToThePowerOfZeroError
 
 """

@@ -1,4 +1,4 @@
-# mathematical_operations_functions_service.py
+# mathematical_operations_functions.py
 
 def fib(n: int) -> int:
     a = b = c = 1
