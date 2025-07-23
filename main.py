@@ -6,17 +6,21 @@ from task_queue import background_worker
 from controller import enqueue_math_operation
 import logging.config
 from logging_config import LOGGING_CONFIG
-
+from repository.database import init_db
 import asyncio
+from operations import router as operations_router  # Import your router
+
 
 logging.config.dictConfig(LOGGING_CONFIG)
 
 app = FastAPI()
 
-
+app.include_router(operations_router)  # Register the router
 
 @app.on_event("startup")
 async def startup_event():
+    init_db()  # ← initialize tables
+
     # start the async background worker
     asyncio.create_task(background_worker())
 

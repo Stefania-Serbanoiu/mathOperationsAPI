@@ -22,18 +22,19 @@ class OperationResult(BaseModel):
     input: OperationRequest
     result: int
 
-
+"""
 class DBRecord(BaseModel):
-    """
-    A record of a stored/computed operation, with timestamp and optional ID
-    Useful for SQLite/file-based logging
-    """
-    id: Optional[int] = None  # Auto-incremented in DB
+    id: Optional[int] = None
     timestamp: datetime = Field(default_factory=datetime.utcnow)
     operation: str
     operand1: int
     operand2: Optional[int] = None
     result: int
+
+    model_config = {
+        "from_attributes": True
+    }
+"""
 
 
 class CachedOperation(BaseModel):
