@@ -2,7 +2,8 @@
 
 from fastapi import APIRouter, HTTPException, Path
 from typing import List
-
+from fastapi import Depends
+from dependencies import verify_bearer_token
 from repository.database import SessionLocal, DBOperationRecord, DBOperationRecordSchema
 
 import logging
@@ -41,7 +42,8 @@ async def get_operation(operation_id: int = Path(..., gt=0)):
 
 # ---------- DELETE Operation by ID ----------
 @router.delete("/{operation_id}")
-async def delete_operation(operation_id: int = Path(..., gt=0)):
+async def delete_operation(operation_id: int = Path(..., gt=0),
+    _ = Depends(verify_bearer_token)):
     db = SessionLocal()
     try:
         record = db.query(DBOperationRecord).filter(DBOperationRecord.id == operation_id).first()
@@ -56,7 +58,7 @@ async def delete_operation(operation_id: int = Path(..., gt=0)):
 
 # ---------- DELETE All Operations ----------
 @router.delete("/")
-async def delete_all_operations():
+async def delete_all_operations( _ = Depends(verify_bearer_token)):
     db = SessionLocal()
     try:
         deleted = db.query(DBOperationRecord).delete()
