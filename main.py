@@ -1,14 +1,14 @@
 # main.py
 
 from fastapi import FastAPI
-from models import OperationRequest, OperationResult
-from task_queue import background_worker
-from controller import enqueue_math_operation
+from Entities.models import OperationRequest, OperationResult
+from Service.task_queue import background_worker
+from CORS.math_operations_async_mechanism import enqueue_math_operation
 import logging.config
-from logging_config import LOGGING_CONFIG
-from repository.database import init_db
+from Configurations_Settings.logging_config import LOGGING_CONFIG
+from Repository.database import init_db
 import asyncio
-from operations import router as operations_router  # Import your router
+from CORS.math_operations_controller import router as operations_router  # Import your router
 
 
 logging.config.dictConfig(LOGGING_CONFIG)

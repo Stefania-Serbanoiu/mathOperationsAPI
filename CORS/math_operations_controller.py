@@ -1,10 +1,10 @@
-# operations.py
+# math_operations_controller.py
 
 from fastapi import APIRouter, HTTPException, Path
 from typing import List
 from fastapi import Depends
-from dependencies import verify_bearer_token
-from repository.database import SessionLocal, DBOperationRecord, DBOperationRecordSchema
+from Authorization.authorization_dependencies import verify_bearer_token
+from Repository.database import SessionLocal, DBOperationRecord, DBOperationRecordSchema
 
 import logging
 
@@ -12,16 +12,16 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/v1/operations", tags=["operations"])
 
-print("✅ operations.py LOADED")  # Indicates the file has been loaded
+print("math_operations_controller.py LOADED")  # Indicates the file has been loaded
 
 # ---------- GET All Operations ----------
 @router.get("", response_model=List[DBOperationRecordSchema])
 async def get_all_operations():
-    print("✅ /v1/operations/ HIT")
+    print("v1/operations/ HIT")
     db = SessionLocal()
     try:
         records = db.query(DBOperationRecord).all()
-        print("✅ Returning:", records)
+        print("Returning:", records)
         return [DBOperationRecordSchema.model_validate(r) for r in records]
     finally:
         db.close()
@@ -66,3 +66,5 @@ async def delete_all_operations( _ = Depends(verify_bearer_token)):
         return {"detail": f"{deleted} operations deleted successfully"}
     finally:
         db.close()
+
+
