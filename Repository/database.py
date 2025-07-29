@@ -2,11 +2,23 @@
 
 from typing import Optional
 from datetime import datetime
-
 from sqlalchemy import Column, Integer, String, DateTime
-
 from pydantic import BaseModel
-from Configurations_Settings.db_config import *
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+
+
+# ---------- Database Configuration ----------
+
+DATABASE_URL = "sqlite:///./operations.db"
+
+engine = create_engine(
+    DATABASE_URL, connect_args={"check_same_thread": False}
+)
+SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+
+Base = declarative_base()
 
 
 

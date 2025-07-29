@@ -1,9 +1,9 @@
-# controller.py
+# math_operations_async_mechanism.py
 
 import asyncio
 from fastapi import HTTPException
-from models import OperationRequest, OperationResult
-from task_queue import task_queue
+from Entities.models import OperationRequest, OperationResult
+from Service.task_queue import task_queue
 
 
 

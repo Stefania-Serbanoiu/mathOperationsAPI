@@ -1,15 +1,12 @@
 # task_queue.py
 
-from repository.database import SessionLocal, DBOperationRecord
-from repository.cache import generate_key, get_cached_result, set_cache
+from Repository.database import SessionLocal, DBOperationRecord
+from Repository.cache import generate_key, get_cached_result, set_cache
 
 import asyncio
-from typing import Callable
-from models import OperationRequest, OperationResult
-from operations_service import perform_power, perform_fibonacci, perform_factorial
-from exceptions import (
-    MissingOperandError,
-    NegativeNumberError,
+from Entities.models import OperationResult
+from Service.operations_service import perform_power, perform_fibonacci, perform_factorial
+from Entities.exceptions import (
     UnsupportedOperationError,
 )
 import logging
@@ -23,8 +20,8 @@ task_queue = asyncio.Queue()
 async def background_worker():
     while True:
         request, future = await task_queue.get()
-        op = request.operation.lower()
-        key = generate_key(op, request.operand1, request.operand2)
+        op = request.mathematical_operation.lower()
+        key = generate_key(op, request.mathematical_operand_1, request.mathematical_operand_2)
 
         try:
             cached_result = get_cached_result(key)
@@ -36,23 +33,23 @@ async def background_worker():
 
             # Compute
             if op == "pow":
-                result = perform_power(request.operand1, request.operand2)
+                result = perform_power(request.mathematical_operand_1, request.mathematical_operand_2)
             elif op == "fib":
-                result = perform_fibonacci(request.operand1)
+                result = perform_fibonacci(request.mathematical_operand_1)
             elif op == "fact":
-                result = perform_factorial(request.operand1)
+                result = perform_factorial(request.mathematical_operand_1)
             else:
                 raise UnsupportedOperationError(f"Unsupported operation: {op}")
 
-            op_result = OperationResult(operation=op, input=request, result=result)
+            op_result = OperationResult(mathematical_operation_name=op, given_input_for_computing_operation=request, result=result)
 
             # Save to DB
             db = SessionLocal()
             db_record = DBOperationRecord(
-                operation=op,
-                operand1=request.operand1,
-                operand2=request.operand2,
-                result=result
+                mathematical_operation_name=op,
+                math_operand_1=request.mathematical_operand_1,
+                math_operand_2=request.mathematical_operand_2,
+                computation_result=result
             )
             db.add(db_record)
             db.commit()
