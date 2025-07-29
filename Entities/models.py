@@ -2,14 +2,22 @@
 
 from pydantic import BaseModel, Field
 from datetime import datetime
+from enum import Enum
 
 """Entity domain classes are defined by inheriting from pydantic BaseModel class"""
+
+
+class OperationType(str, Enum):
+    pow = "pow"
+    fib = "fib"
+    fact = "fact"
+
 
 class OperationRequest(BaseModel):
     """
     Represents an input to the system (input defining a mathematical operation supported by the system)
     """
-    mathematical_operation: str = Field(..., description="One of: pow(power computation), fib(the n-th fibonacci number), fact(the factorial of a number)")
+    mathematical_operation: OperationType = Field(..., description="One of: pow(power computation), fib(the n-th fibonacci number), fact(the factorial of a number)")
     mathematical_operand_1: int = Field(..., description="First number (required)")
     mathematical_operand_2: int | None = Field(None, description="Second number (used only for pow - for exponent operand)")
 
