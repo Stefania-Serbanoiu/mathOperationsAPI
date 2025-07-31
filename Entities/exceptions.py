@@ -11,14 +11,19 @@ class MissingOperandError(OperationError):
 
 
 class NegativeNumberError(OperationError):
-    """Exception for negative number (in mathematical operations where a negative number is not valid)"""
+    """Exception for negative number
+    (in mathematical operations where a negative number is not valid)"""
     pass
 
 
 class UnsupportedOperationError(OperationError):
-    """Exception for mathematical operation which is not supported by application logic or defined inside the app"""
+    """Exception for mathematical operation
+    which is not supported by application logic or defined
+    inside the app"""
     pass
 
+
 class ZeroToThePowerOfZeroError(OperationError):
-    """Exception for mathematical operation 0**0 , which is not defined and computed by complex processes"""
+    """Exception for mathematical operation 0**0 ,
+     which is not defined and computed by complex processes"""
     pass

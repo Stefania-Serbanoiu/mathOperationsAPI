@@ -2,16 +2,17 @@
 
 import logging
 from Service.mathematical_operations_functions import fib, factorial
-from Entities.exceptions import MissingOperandError, NegativeNumberError, ZeroToThePowerOfZeroError
+from Entities.exceptions import MissingOperandError, NegativeNumberError
+from Entities.exceptions import ZeroToThePowerOfZeroError
 
 """
-This service layer of the arhitecture is responsible with logging and dealing with validation problems,
+This service layer of the arhitecture is responsible with logging
+and dealing with validation problems,
 before calling the actual mathematical functions
 """
 
 
 logger = logging.getLogger(__name__)
-
 
 
 def perform_power(operand_1: float, operand_2: float | None = None) -> float:
@@ -23,7 +24,7 @@ def perform_power(operand_1: float, operand_2: float | None = None) -> float:
     if operand_2 is None:
         raise MissingOperandError("Missing operand2 for power operation")
     if operand_1 == 0 and operand_2 == 0:
-        raise ZeroToThePowerOfZeroError("0**0 is considered an incorrect operation")
+        raise ZeroToThePowerOfZeroError("0**0 -> incorrect operation")
     return operand_1 ** operand_2
 
 

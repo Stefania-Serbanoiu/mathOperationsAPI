@@ -3,6 +3,7 @@
 from fastapi import Header, HTTPException, status
 from Configurations_Settings.authorization_config import BEARER_TOKEN
 
+
 def verify_bearer_token(authorization: str = Header(None)):
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(

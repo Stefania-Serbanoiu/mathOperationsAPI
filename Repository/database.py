@@ -21,8 +21,6 @@ SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 Base = declarative_base()
 
 
-
-
 class DBOperationRecord(Base):
     """
     SQLAlchemy ORM Model using SQAlchemy class 'Base'
@@ -38,7 +36,6 @@ class DBOperationRecord(Base):
     computation_result = Column(Integer, nullable=False)
 
 
-
 class DBOperationRecordSchema(BaseModel):
     """
     Pydantic Schema for API , inheriting from pydantic 'BaseModel' class
@@ -51,8 +48,6 @@ class DBOperationRecordSchema(BaseModel):
     computation_result: int
 
     model_config = {"from_attributes": True}
-
-
 
 
 def init_db():

@@ -4,7 +4,8 @@ from fastapi import APIRouter, HTTPException, Path
 from typing import List
 from fastapi import Depends
 from Authorization.authorization_dependencies import verify_bearer_token
-from Repository.database import SessionLocal, DBOperationRecord, DBOperationRecordSchema
+from Repository.database import (SessionLocal, DBOperationRecord)
+from Repository.database import DBOperationRecordSchema
 
 import logging
 
@@ -12,7 +13,9 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/v1/operations", tags=["operations"])
 
-print("math_operations_controller.py LOADED")  # Indicates the file has been loaded
+print("math_operations_controller.py LOADED")
+# Indicates the file has been loaded
+
 
 # ---------- GET All Operations ----------
 @router.get("", response_model=List[DBOperationRecordSchema])
@@ -29,10 +32,12 @@ async def get_all_operations():
 
 # ---------- GET Operation by ID ----------
 @router.get("/{operation_id}", response_model=DBOperationRecordSchema)
-async def get_operation(operation_id: int = Path(..., gt=0)):
+async def get_operation(operation_id: int = Path(...,
+                                                 gt=0)):
     db = SessionLocal()
     try:
-        record = db.query(DBOperationRecord).filter(DBOperationRecord.id == operation_id).first()
+        record = (db.query(DBOperationRecord).
+                  filter(DBOperationRecord.id == operation_id).first())
         if record is None:
             raise HTTPException(status_code=404, detail="Operation not found")
         return DBOperationRecordSchema.model_validate(record)
@@ -43,22 +48,24 @@ async def get_operation(operation_id: int = Path(..., gt=0)):
 # ---------- DELETE Operation by ID ----------
 @router.delete("/{operation_id}")
 async def delete_operation(operation_id: int = Path(..., gt=0),
-    _ = Depends(verify_bearer_token)):
+                           _=Depends(verify_bearer_token)):
     db = SessionLocal()
     try:
-        record = db.query(DBOperationRecord).filter(DBOperationRecord.id == operation_id).first()
+        record = (db.query(DBOperationRecord).
+                  filter(DBOperationRecord.id == operation_id).first())
         if not record:
             raise HTTPException(status_code=404, detail="Operation not found")
         db.delete(record)
         db.commit()
-        return {"detail": f"Operation with ID {operation_id} deleted successfully"}
+        return {"detail": f"Operation with ID {operation_id} "
+                          f"deleted successfully"}
     finally:
         db.close()
 
 
 # ---------- DELETE All Operations ----------
 @router.delete("/")
-async def delete_all_operations( _ = Depends(verify_bearer_token)):
+async def delete_all_operations(_=Depends(verify_bearer_token)):
     db = SessionLocal()
     try:
         deleted = db.query(DBOperationRecord).delete()
@@ -66,5 +73,3 @@ async def delete_all_operations( _ = Depends(verify_bearer_token)):
         return {"detail": f"{deleted} operations deleted successfully"}
     finally:
         db.close()
-
-

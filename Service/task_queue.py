@@ -5,7 +5,8 @@ from Repository.cache import generate_key, get_cached_result, set_cache
 
 import asyncio
 from Entities.models import OperationResult
-from Service.operations_service import perform_power, perform_fibonacci, perform_factorial
+from Service.operations_service import (perform_power,
+                                        perform_fibonacci, perform_factorial)
 from Entities.exceptions import (
     UnsupportedOperationError,
 )
@@ -21,7 +22,8 @@ async def background_worker():
     while True:
         request, future = await task_queue.get()
         op = request.mathematical_operation.lower()
-        key = generate_key(op, request.mathematical_operand_1, request.mathematical_operand_2)
+        key = generate_key(op, request.mathematical_operand_1,
+                           request.mathematical_operand_2)
 
         try:
             cached_result = get_cached_result(key)
@@ -33,7 +35,8 @@ async def background_worker():
 
             # Compute
             if op == "pow":
-                result = perform_power(request.mathematical_operand_1, request.mathematical_operand_2)
+                result = perform_power(request.mathematical_operand_1,
+                                       request.mathematical_operand_2)
             elif op == "fib":
                 result = perform_fibonacci(request.mathematical_operand_1)
             elif op == "fact":
@@ -41,7 +44,10 @@ async def background_worker():
             else:
                 raise UnsupportedOperationError(f"Unsupported operation: {op}")
 
-            op_result = OperationResult(mathematical_operation_name=op, given_input_for_computing_operation=request, result=result)
+            op_result = OperationResult(
+                mathematical_operation_name=op,
+                given_input_for_computing_operation=request,
+                result=result)
 
             # Save to DB
             db = SessionLocal()
@@ -62,8 +68,8 @@ async def background_worker():
             future.set_result(op_result)
 
         except Exception as e:
-            logger.exception(f"ERROR during '{op}' with input {request.dict()}: {e}")
+            logger.exception(f"ERROR during '{op}' "
+                             f"with input {request.dict()}: {e}")
             future.set_exception(e)
 
         task_queue.task_done()
-

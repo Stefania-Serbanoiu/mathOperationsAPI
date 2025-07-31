@@ -6,8 +6,6 @@ from Entities.models import OperationRequest, OperationResult
 from Service.task_queue import task_queue
 
 
-
-
 async def enqueue_math_operation(request: OperationRequest) -> OperationResult:
     loop = asyncio.get_running_loop()
     future = loop.create_future()

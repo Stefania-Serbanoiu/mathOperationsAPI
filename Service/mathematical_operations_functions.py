@@ -6,8 +6,9 @@ def fib(n: int) -> int:
     :param n:gives the position in the sequence(integer)
     :return:n-th fibonacci number (integer)
     """
-    a = b = c = 1 # a,b,c -> numbers in the fibonacci sequence
-    counter = 2 # we consider just a=b=1 already known, and if n <= 2 the result (in c) would be 1
+    a = b = c = 1  # a,b,c -> numbers in the fibonacci sequence
+    # we consider a=b=1, and if n <= 2 the result (in c) would be 1
+    counter = 2
 
     # fib algorithm
     while counter < n:
