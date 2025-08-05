@@ -83,6 +83,25 @@ This API supports computation of different mathematical functions and provides a
 
 ---
 
+
+### Docker (Containerized Setup)
+
+1. **Build the Docker image**
+    ```sh
+    docker build -t math-operations-api-container .
+    ```
+
+2. **Run the Docker container**
+    ```sh
+    docker run -p 8000:8000 math-operations-api-container
+    ```
+
+    The API will now be available at: [http://localhost:8000](http://localhost:8000)
+
+
+
+---
+
 ## Swagger UI Frontend
 
 For the frontend integrated by Swagger UI, access:  
