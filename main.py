@@ -1,12 +1,12 @@
 from fastapi import FastAPI
 from Entities.models import OperationRequest, OperationResult
 from Service.task_queue import background_worker
-from CORS.math_operations_async_mechanism import enqueue_math_operation
+from Routes.math_operations_async_mechanism import enqueue_math_operation
 import logging.config
 from Configurations_Settings.logging_config import LOGGING_CONFIG
 from Repository.database import init_db
 import asyncio
-from CORS.math_operations_controller import router as operations_router
+from Routes.math_operations_controller import router as operations_router
 from fastapi.openapi.utils import get_openapi
 
 
@@ -30,7 +30,7 @@ async def compute(request: OperationRequest):
     return await enqueue_math_operation(request)
 
 
-# ---------- Swagger UI Global Bearer Auth ----------
+# Swagger UI Global Bearer Auth
 def custom_openapi():
     if app.openapi_schema:
         return app.openapi_schema

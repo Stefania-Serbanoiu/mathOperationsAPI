@@ -42,21 +42,6 @@ class OperationResult(BaseModel):
     result: int
 
 
-"""
-class DBRecord(BaseModel):
-    id: Optional[int] = None
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
-    operation: str
-    operand1: int
-    operand2: Optional[int] = None
-    result: int
-
-    model_config = {
-        "from_attributes": True
-    }
-"""
-
-
 class CachedOperation(BaseModel):
     """
     Represents a cache entry for previously computed results
