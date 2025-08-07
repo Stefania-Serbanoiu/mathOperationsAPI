@@ -19,6 +19,7 @@ This API supports computation of different mathematical functions and provides a
 - **Mathematical operations:** power, fibonacci sum, factorial.
 - **Asynchronicity** for performing operations.
 - **Deletion of stored data.**
+- **Containerized Setup.**
 - **Authorization for deletion** with Bearer token.
 - **Logging of performed operations** in `operations.log`.
 - **Local caching** using a dictionary to prevent duplicate values for computation.
