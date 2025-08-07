@@ -1,5 +1,3 @@
-# Repository/database.py
-
 from typing import Optional
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, DateTime

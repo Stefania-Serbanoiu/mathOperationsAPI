@@ -1,5 +1,3 @@
-# mathematical_operations_functions.py
-
 def fib(n: int) -> int:
     """
     Compute the n-th number in the fibonacci sequence

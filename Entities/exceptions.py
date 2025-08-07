@@ -1,5 +1,3 @@
-# exceptions.py
-
 class OperationError(Exception):
     """Base class for all operation-related exceptions"""
     pass

@@ -1,5 +1,3 @@
-# authorization_dependencies.py
-
 from fastapi import Header, HTTPException, status
 from Configurations_Settings.authorization_config import BEARER_TOKEN
 

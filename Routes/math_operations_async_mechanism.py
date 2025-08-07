@@ -1,5 +1,3 @@
-# math_operations_async_mechanism.py
-
 import asyncio
 from fastapi import HTTPException
 from Entities.models import OperationRequest, OperationResult

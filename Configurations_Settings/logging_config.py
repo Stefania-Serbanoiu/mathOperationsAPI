@@ -1,5 +1,3 @@
-# logging_config.py
-
 LOGGING_CONFIG = {
     "version": 1,
     "disable_existing_loggers": False,

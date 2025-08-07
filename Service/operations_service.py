@@ -1,5 +1,3 @@
-# operations_service.py
-
 import logging
 from Service.mathematical_operations_functions import fib, factorial
 from Entities.exceptions import MissingOperandError, NegativeNumberError

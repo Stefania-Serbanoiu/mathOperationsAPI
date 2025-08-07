@@ -1,5 +1,3 @@
-# math_operations_controller.py
-
 from fastapi import APIRouter, HTTPException, Path
 from typing import List
 from fastapi import Depends
@@ -17,7 +15,7 @@ print("math_operations_controller.py LOADED")
 # Indicates the file has been loaded
 
 
-# ---------- GET All Operations ----------
+# GET All Operations
 @router.get("", response_model=List[DBOperationRecordSchema])
 async def get_all_operations():
     print("v1/operations/ HIT")
@@ -30,7 +28,7 @@ async def get_all_operations():
         db.close()
 
 
-# ---------- GET Operation by ID ----------
+# GET Operation by ID
 @router.get("/{operation_id}", response_model=DBOperationRecordSchema)
 async def get_operation(operation_id: int = Path(...,
                                                  gt=0)):
@@ -45,7 +43,7 @@ async def get_operation(operation_id: int = Path(...,
         db.close()
 
 
-# ---------- DELETE Operation by ID ----------
+# DELETE Operation by ID
 @router.delete("/{operation_id}")
 async def delete_operation(operation_id: int = Path(..., gt=0),
                            _=Depends(verify_bearer_token)):
@@ -63,7 +61,7 @@ async def delete_operation(operation_id: int = Path(..., gt=0),
         db.close()
 
 
-# ---------- DELETE All Operations ----------
+# DELETE All Operations
 @router.delete("/")
 async def delete_all_operations(_=Depends(verify_bearer_token)):
     db = SessionLocal()
