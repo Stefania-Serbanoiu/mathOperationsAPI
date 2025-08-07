@@ -2,27 +2,36 @@ from fastapi import APIRouter, HTTPException, Path
 from typing import List
 from fastapi import Depends
 from Authorization.authorization_dependencies import verify_bearer_token
+from Entities.models import OperationResult, OperationRequest
 from Repository.database import (SessionLocal, DBOperationRecord)
 from Repository.database import DBOperationRecordSchema
 
 import logging
 
+from Routes.math_operations_async_mechanism import enqueue_math_operation
+
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/v1/operations", tags=["operations"])
 
-print("math_operations_controller.py LOADED")
+# print("math_operations_controller.py LOADED")
 # Indicates the file has been loaded
+
+
+# POST : submit a math operation
+@router.post("/compute", response_model=OperationResult)
+async def compute(request: OperationRequest):
+    return await enqueue_math_operation(request)
 
 
 # GET All Operations
 @router.get("", response_model=List[DBOperationRecordSchema])
 async def get_all_operations():
-    print("v1/operations/ HIT")
+    # print("v1/operations/ HIT")
     db = SessionLocal()
     try:
         records = db.query(DBOperationRecord).all()
-        print("Returning:", records)
+        # print("Returning:", records)
         return [DBOperationRecordSchema.model_validate(r) for r in records]
     finally:
         db.close()
