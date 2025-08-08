@@ -1,7 +1,7 @@
 import logging
 from Service.mathematical_operations_functions import fib, factorial
-from Entities.exceptions import MissingOperandError, NegativeNumberError
-from Entities.exceptions import ZeroToThePowerOfZeroError
+from Model.exceptions import MissingOperandError, NegativeNumberError
+from Model.exceptions import ZeroToThePowerOfZeroError
 
 """
 This service layer of the arhitecture is responsible with logging

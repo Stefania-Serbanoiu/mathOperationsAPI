@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from Entities.models import OperationRequest, OperationResult
+from Model.models import OperationRequest, OperationResult
 from Service.task_queue import background_worker
 from Configurations_Settings.logging_config import LOGGING_CONFIG
 from Repository.database import init_db

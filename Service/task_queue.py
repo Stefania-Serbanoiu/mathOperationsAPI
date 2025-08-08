@@ -2,10 +2,10 @@ from Repository.database import SessionLocal, DBOperationRecord
 from Repository.cache import generate_key, get_cached_result, set_cache
 
 import asyncio
-from Entities.models import OperationResult
+from Model.models import OperationResult
 from Service.operations_service import (perform_power,
                                         perform_fibonacci, perform_factorial)
-from Entities.exceptions import (
+from Model.exceptions import (
     UnsupportedOperationError,
 )
 import logging

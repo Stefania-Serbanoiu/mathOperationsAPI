@@ -1,4 +1,4 @@
-from Entities.models import OperationResult, CachedOperation
+from Model.models import OperationResult, CachedOperation
 from datetime import datetime
 
 

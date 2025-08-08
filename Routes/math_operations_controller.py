@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Path
 from typing import List
 from fastapi import Depends
 from Authorization.authorization_dependencies import verify_bearer_token
-from Entities.models import OperationResult, OperationRequest
+from Model.models import OperationResult, OperationRequest
 from Repository.database import (SessionLocal, DBOperationRecord)
 from Repository.database import DBOperationRecordSchema
 

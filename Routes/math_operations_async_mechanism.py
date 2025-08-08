@@ -1,6 +1,6 @@
 import asyncio
 from fastapi import HTTPException
-from Entities.models import OperationRequest, OperationResult
+from Model.models import OperationRequest, OperationResult
 from Service.task_queue import task_queue
 
 
