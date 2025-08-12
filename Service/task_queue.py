@@ -1,6 +1,5 @@
 from Repository.database import SessionLocal, DBOperationRecord
 from Repository.cache import generate_key, get_cached_result, set_cache
-
 import asyncio
 from Model.models import OperationResult
 from Service.operations_service import (perform_power,
@@ -10,7 +9,9 @@ from Model.exceptions import (
 )
 import logging
 
+
 logger = logging.getLogger(__name__)
+
 
 # async task queue
 task_queue = asyncio.Queue()
@@ -42,12 +43,13 @@ async def background_worker():
             else:
                 raise UnsupportedOperationError(f"Unsupported operation: {op}")
 
+            # If the operation was successful, save to db
             op_result = OperationResult(
                 mathematical_operation_name=op,
                 given_input_for_computing_operation=request,
                 result=result)
 
-            # Save to DB
+            # Save to db
             db = SessionLocal()
             db_record = DBOperationRecord(
                 mathematical_operation_name=op,
