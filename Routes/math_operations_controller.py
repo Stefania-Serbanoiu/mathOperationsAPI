@@ -1,6 +1,5 @@
-from fastapi import APIRouter, HTTPException, Path, Request
+from fastapi import APIRouter, HTTPException, Path, Request, Depends, status
 from typing import List
-from fastapi import Depends
 import logging
 from Authorization.authorization_dependencies import verify_bearer_token
 from Model.models import OperationResult, OperationRequest
@@ -16,14 +15,16 @@ router = APIRouter(prefix="/v1/operations", tags=["operations"])
 
 
 # POST : submit a math operation
-@router.post("/compute", response_model=OperationResult)
+@router.post("/compute", response_model=OperationResult,
+             status_code=status.HTTP_200_OK)
 async def compute(request: OperationRequest, _: Request):
     logger.info(f"Received compute request: {request.model_dump()}")
     return await enqueue_math_operation(request)
 
 
 # GET All Operations
-@router.get("", response_model=List[DBOperationRecordSchema])
+@router.get("", response_model=List[DBOperationRecordSchema],
+            status_code=status.HTTP_200_OK)
 async def get_all_operations(_: Request):
     logger.info("Fetching all operation records")
     db = SessionLocal()
@@ -36,7 +37,8 @@ async def get_all_operations(_: Request):
 
 
 # GET Operation by ID
-@router.get("/{operation_id}", response_model=DBOperationRecordSchema)
+@router.get("/{operation_id}", response_model=DBOperationRecordSchema,
+            status_code=status.HTTP_200_OK)
 async def get_operation(operation_id: int = Path(..., gt=0),
                         _: Request = None):
     logger.info(f"Fetching operation by ID: {operation_id}")
@@ -46,7 +48,8 @@ async def get_operation(operation_id: int = Path(..., gt=0),
                   filter(DBOperationRecord.id == operation_id).first())
         if record is None:
             logger.warning(f"Operation ID {operation_id} not found")
-            raise HTTPException(status_code=404, detail="Operation not found")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail="Operation not found")
         logger.info(f"Found record for ID {operation_id}")
         return DBOperationRecordSchema.model_validate(record)
     finally:
@@ -54,7 +57,7 @@ async def get_operation(operation_id: int = Path(..., gt=0),
 
 
 # DELETE Operation by ID
-@router.delete("/{operation_id}")
+@router.delete("/{operation_id}", status_code=status.HTTP_200_OK)
 async def delete_operation(operation_id: int = Path(..., gt=0),
                            _: Depends = Depends(verify_bearer_token),
                            __: Request = None):
@@ -64,9 +67,10 @@ async def delete_operation(operation_id: int = Path(..., gt=0),
         record = (db.query(DBOperationRecord).
                   filter(DBOperationRecord.id == operation_id).first())
         if not record:
-            logger.warning(f"Operation ID {operation_id} "
-                           f"not found for deletion")
-            raise HTTPException(status_code=404, detail="Operation not found")
+            logger.warning(f"Operation ID "
+                           f"{operation_id} not found for deletion")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail="Operation not found")
         db.delete(record)
         db.commit()
         logger.info(f"Deleted operation ID: {operation_id}")
@@ -77,7 +81,7 @@ async def delete_operation(operation_id: int = Path(..., gt=0),
 
 
 # DELETE All Operations
-@router.delete("/")
+@router.delete("/", status_code=status.HTTP_200_OK)
 async def delete_all_operations(_: Depends = Depends(verify_bearer_token),
                                 __: Request = None):
     logger.info("Deleting all operations")
