@@ -1,6 +1,13 @@
-from dotenv import load_dotenv
-import os
+from pydantic_settings import BaseSettings
+from pydantic import Field
 
-load_dotenv()  # Load from .env file
 
-BEARER_TOKEN = os.getenv("BEARER_TOKEN")
+class AuthSettings(BaseSettings):
+    bearer_token: str = Field(..., alias="BEARER_TOKEN")
+
+    class Config:
+        env_file = ".env"
+        extra = "ignore"
+
+
+settings = AuthSettings()
