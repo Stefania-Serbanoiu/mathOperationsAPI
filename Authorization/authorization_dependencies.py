@@ -1,5 +1,5 @@
 from fastapi import Header, HTTPException, status
-from Configurations_Settings.authorization_config import settings
+from Configurations_Settings.app_settings import settings
 
 
 def verify_bearer_token(authorization: str = Header(None)):

@@ -1,6 +1,7 @@
 import logging
 import pika
 import json
+import sys
 
 
 class RabbitMQHandler(logging.Handler):
@@ -20,12 +21,12 @@ class RabbitMQHandler(logging.Handler):
             self.channel = self.connection.channel()
             self.channel.queue_declare(queue=self.queue, durable=True)
         except Exception as e:
-            print(f"[RabbitMQHandler] Connection error:"
+            sys.stderr.write(f"[RabbitMQHandler] Connection error:"
                   f" {e.__class__.__name__}: {e}")
             self.connection = None
 
     def emit(self, record):
-        print("Check: RabbitMQHandler.emit() called")
+        sys.stderr.write("Check: RabbitMQHandler.emit() called")
         try:
             if self.connection is None or self.connection.is_closed:
                 self.connect()
@@ -40,4 +41,8 @@ class RabbitMQHandler(logging.Handler):
                 properties=pika.BasicProperties(delivery_mode=2)
             )
         except Exception as e:
-            print(f"[RabbitMQHandler] Emit failed: {e}")
+            sys.stderr.write(f"[RabbitMQHandler] Emit failed: {e}")
+
+    def filter(self, record):
+        # Drop all logs from pika.* modules
+        return not record.name.startswith("pika")

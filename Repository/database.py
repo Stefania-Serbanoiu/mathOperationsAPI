@@ -1,20 +1,20 @@
 from typing import Optional
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, create_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
 from pydantic import BaseModel
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
+from Configurations_Settings.app_settings import settings
 
 
-# ---------- Database Configuration ----------
+# Database Configuration from .env
+DATABASE_URL = settings.database_url  # loaded via Pydantic settings class
 
-DATABASE_URL = "sqlite:///./operations.db"
 
 engine = create_engine(
     DATABASE_URL, connect_args={"check_same_thread": False}
 )
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+
 
 Base = declarative_base()
 
@@ -25,7 +25,6 @@ class DBOperationRecord(Base):
     record -> db record representing data for a mathematical operation
     """
     __tablename__ = "operations"
-
     id = Column(Integer, primary_key=True, index=True)
     timestamp = Column(DateTime, default=datetime.utcnow)
     mathematical_operation_name = Column(String, nullable=False)
