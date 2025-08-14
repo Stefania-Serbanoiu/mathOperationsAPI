@@ -16,15 +16,56 @@ This API supports computation of different mathematical functions and provides a
 
 ## Functionalities
 
-- **DB storage in SQLite** with timestamp.
+- **DB storage in SQLite** with timestamp : `operations.db`.
 - **Mathematical operations:** power, fibonacci sum, factorial.
 - **Asynchronicity** for performing operations.
 - **Deletion of stored data.**
-- **Containerized Setup.**
+- **Containerized setup.**
 - **Authorization for deletion** with Bearer token.
 - **Local caching** using a dictionary to prevent duplicate values for computation.
 - **Logging of performed operations** Logging of execution messages, using RabbitMQ, console and in the file `operations.log`.
 - 
+---
+
+
+
+
+
+
+## .env configuration
+
+Before running the application, create a `.env` file in the project root directory to store environment variables. This file is used for authentication and database connection.
+
+### Example `.env` file:
+```
+BEARER_TOKEN="example-token"
+DATABASE_URL=sqlite:///./operations.db
+```
+
+
+---
+
+## Installing RabbitMQ with Docker
+
+RabbitMQ is used for logging operations in this API. Run it using Docker (compatible with Rancher Desktop), from the WSL console:
+
+```
+docker run -d \
+  --hostname rabbitmq-host \
+  --name rabbitmq \
+  -p 5672:5672 \
+  -p 15672:15672 \
+  rabbitmq:3-management
+```
+Then, start the container from Rancher Desktop before running the app.
+
+### Access the RabbitMQ Management Dashboard
+
+- **URL:** [http://localhost:15672](http://localhost:15672)  
+- **Username:** `guest`  
+- **Password:** `guest`
+
+
 ---
 
 ## Installation & Running the App
@@ -47,15 +88,37 @@ This API supports computation of different mathematical functions and provides a
     pip install -r requirements.txt
     ```
 
-4. Start the server:
+4. Make sure the .env file is created and correctly configured, and that RabbitMQ is also installed (how to do this is described above).
+5. Start the server:
     ```sh
-    uvicorn main:app --reload
+    uvicorn main:app
     ```
     This will start the server, accessible at:  
     [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
 ---
 
+### Docker (Containerized Setup with WSL + Rancher Desktop)
+
+This project is containerized using **Docker**. It runs seamlessly in a **WSL (Windows Subsystem for Linux)** environment with **Rancher Desktop**.
+
+>  You can verify Docker is working inside WSL by running `docker info`.
+
+
+1. **Build the Docker image**
+    ```sh
+    docker build -t math-operations-api-container .
+    ```
+
+2. **Run the Docker container**
+    ```sh
+    docker run -p 8000:8000 math-operations-api-container
+    ```
+
+    The API will now be available at: [http://localhost:8000](http://localhost:8000)
+
+
+---
 ## Example API Calls (using Postman or similar tools)
 
 **Compute:**
@@ -102,32 +165,11 @@ This API supports computation of different mathematical functions and provides a
 - Get all:  
   `GET` `http://127.0.0.1:8000/v1/operations`
 
----
 
-
-### Docker (Containerized Setup with WSL + Rancher Desktop)
-
-This project is containerized using **Docker**. It runs seamlessly in a **WSL (Windows Subsystem for Linux)** environment with **Rancher Desktop**.
-
->  You can verify Docker is working inside WSL by running `docker info`.
-
-
-1. **Build the Docker image**
-    ```sh
-    docker build -t math-operations-api-container .
-    ```
-
-2. **Run the Docker container**
-    ```sh
-    docker run -p 8000:8000 math-operations-api-container
-    ```
-
-    The API will now be available at: [http://localhost:8000](http://localhost:8000)
 
 
 
 ---
-
 ## Swagger UI Frontend
 
 For the frontend integrated by Swagger UI, access:  
